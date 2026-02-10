@@ -1,7 +1,6 @@
 package org.rgbmc.multiplayerfix.mixin;
 
 import com.mojang.authlib.yggdrasil.YggdrasilSocialInteractionsService;
-import org.rgbmc.multiplayerfix.MultiplayerFix;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,7 +41,6 @@ public class SocialInteractionsServiceMixin {
 
     @Inject(at = @At("HEAD"), method = "checkPrivileges", cancellable = true, remap = false)
     public void checkPrivileges(CallbackInfo ci) {
-        MultiplayerFix.logger.info("Bypassed privilege checks");
         serversAllowed = true;
         realmsAllowed = true;
         chatAllowed = true;
@@ -51,14 +49,12 @@ public class SocialInteractionsServiceMixin {
 
     @Inject(at = @At("HEAD"), method = "fetchBlockList", cancellable = true, remap = false)
     public void fetchBlockList(CallbackInfoReturnable<Set<UUID>> cir) {
-        MultiplayerFix.logger.info("Returned empty blocked uuid set");
         cir.setReturnValue(new HashSet<>());
         cir.cancel();
     }
 
     @Inject(at = @At("HEAD"), method = "isBlockedPlayer", cancellable = true, remap = false)
     public void isBlockedPlayer(UUID playerID, CallbackInfoReturnable<Boolean> cir) {
-        MultiplayerFix.logger.info("Bypassed player blocked check");
         cir.setReturnValue(false);
         cir.cancel();
     }
